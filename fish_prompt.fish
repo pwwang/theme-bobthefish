@@ -50,6 +50,33 @@
 # Helper methods
 # ==============================
 
+function __bobthefish_is_parent -S -a path1 path2 -d 'Tell if path1 is the parent of path2 directly'
+	# /home/user = /home/user
+	if test "$path1" = "$path2"
+		echo -n 'yes'
+		return
+	end
+
+	# /home/user /home/user/a/b
+	set -l len1 (string length "$path1/")
+	if test (string sub -s 1 -l $len1 "$path2") = "$path1/"
+		echo -n 'yes'
+		return
+	end
+
+	echo -n 'no'
+end
+
+function __bobthefish_shorten_home -S -d 'Replace prefix $HOME with ~'
+	if test (__bobthefish_is_parent "$HOME" "$argv") = 'no' -o (__bobthefish_is_parent '~' "$argv") = 'yes'
+		echo -n $argv
+	else
+		set -l lenhome (string length "$HOME/")
+		set -l rest (string sub -s $lenhome "$argv")
+		test -z "$rest"; and echo "~"; or echo "~$rest"
+	end
+end
+
 function __bobthefish_basename -d 'basically basename, but faster'
 	string replace -r '^.*/' '' -- $argv
 end
@@ -89,7 +116,6 @@ function __bobthefish_pretty_parent -S -a current_dir -d 'Print a parent directo
 	# Replace $HOME with ~
 	set -l real_home ~
 	set -l parent_dir (string replace -r '^'"$real_home"'($|/)' '~$1' (__bobthefish_dirname $current_dir))
-
 	# Must check whether `$parent_dir = /` if using native dirname
 	if [ -z "$parent_dir" ]
 		echo -n /
@@ -107,7 +133,7 @@ end
 function __bobthefish_ignore_vcs_dir -d 'Check whether the current directory should be ignored as a VCS segment'
 	for p in $theme_vcs_ignore_paths
 		set ignore_path (realpath $p 2>/dev/null)
-		switch $PWD/
+		switch $PWD2/
 			case $ignore_path/\*
 				echo 1
 				return
@@ -122,18 +148,23 @@ function __bobthefish_git_project_dir -S -d 'Print the current git project base 
 		and [ (__bobthefish_ignore_vcs_dir) ]
 		and return
 
+	set -l prefix (command git rev-parse --show-prefix ^/dev/null); or return
+	set -l lenpref (string length $prefix)
+	set -l lenpwd2 (string length $PWD2)
+	set -l git_dir (string sub -s 1 -l (math $lenpwd2-$lenpref) $PWD2)
 	if [ "$theme_git_worktree_support" != 'yes' ]
-		command git rev-parse --show-toplevel 2>/dev/null
+		#command git rev-parse --show-toplevel 2>/dev/null
+		echo $git_dir
 		return
 	end
 
-	set -l git_dir (command git rev-parse --git-dir 2>/dev/null); or return
+	#set -l git_dir (command git rev-parse --git-dir 2>/dev/null); or return
 
 	pushd $git_dir
-	set git_dir $PWD
+	set git_dir $PWD2
 	popd
 
-	switch $PWD/
+	switch $PWD2/
 		case $git_dir/\*
 			# Nothing works quite right if we're inside the git dir
 			# TODO: fix the underlying issues then re-enable the stuff below
@@ -151,14 +182,14 @@ function __bobthefish_git_project_dir -S -d 'Print the current git project base 
 
 	set -l project_dir (__bobthefish_dirname $git_dir)
 
-	switch $PWD/
+	switch $PWD2/
 		case $project_dir/\*
 			echo $project_dir
 			return
 	end
 
 	set project_dir (command git rev-parse --show-toplevel 2>/dev/null)
-	switch $PWD/
+	switch $PWD2/
 		case $project_dir/\*
 			echo $project_dir
 	end
@@ -171,7 +202,7 @@ function __bobthefish_hg_project_dir -S -d 'Print the current hg project base di
 		and [ (__bobthefish_ignore_vcs_dir) ]
 		and return
 
-	set -l d $PWD
+	set -l d $PWD2
 	while not [ -z "$d" ]
 		if [ -e $d/.hg ]
 			command hg root --cwd "$d" 2>/dev/null
@@ -186,7 +217,7 @@ function __bobthefish_project_pwd -S -a current_dir -d 'Print the working direct
 	set -q theme_project_dir_length
 		or set -l theme_project_dir_length 0
 
-	set -l project_dir (string replace -r '^'"$current_dir"'($|/)' '' $PWD)
+	set -l project_dir (string replace -r '^'"$current_dir"'($|/)' '' $PWD2)
 
 	if [ $theme_project_dir_length -eq 0 ]
 		echo -n $project_dir
@@ -305,6 +336,11 @@ function __bobthefish_path_segment -S -a current_dir -d 'Display a shortened for
 			set directory '/'
 		case "$HOME"
 			set directory '~'
+		case "~"
+			set directory '~'
+		case $HOME/\*
+			set parent (__bobthefish_pretty_parent (__bobthefish_shorten_home "$current_dir"))
+			set directory (__bobthefish_basename "$current_dir")
 		case '*'
 			set parent (__bobthefish_pretty_parent "$current_dir")
 			set directory (__bobthefish_basename "$current_dir")
@@ -771,7 +807,7 @@ function __bobthefish_prompt_hg -S -a current_dir -d 'Display the actual hg stat
 
 	set -l project_pwd (__bobthefish_project_pwd $current_dir)
 	if [ "$project_pwd" ]
-		if [ -w "$PWD" ]
+		if [ -w "$PWD2" ]
 			__bobthefish_start_segment $color_path
 		else
 			__bobthefish_start_segment $color_path_nowrite
@@ -828,7 +864,7 @@ function __bobthefish_prompt_git -S -a current_dir -d 'Display the actual git st
 	if [ "$theme_git_worktree_support" != 'yes' ]
 		set -l project_pwd (__bobthefish_project_pwd $current_dir)
 		if [ "$project_pwd" ]
-			if [ -w "$PWD" ]
+			if [ -w "$PWD2" ]
 				__bobthefish_start_segment $color_path
 			else
 				__bobthefish_start_segment $color_path_nowrite
@@ -844,7 +880,7 @@ function __bobthefish_prompt_git -S -a current_dir -d 'Display the actual git st
 
 	# only show work dir if it's a parent…
 	if [ "$work_dir" ]
-		switch $PWD/
+		switch $PWD2/
 			case $work_dir/\*
 				string match "$current_dir*" $work_dir >/dev/null
 					and set work_dir (string sub -s (math 1 + (string length $current_dir)) $work_dir)
@@ -855,7 +891,7 @@ function __bobthefish_prompt_git -S -a current_dir -d 'Display the actual git st
 
 	if [ "$project_pwd" -o "$work_dir" ]
 		set -l colors $color_path
-		if not [ -w "$PWD" ]
+		if not [ -w "$PWD2" ]
 			set colors $color_path_nowrite
 		end
 
@@ -878,14 +914,14 @@ function __bobthefish_prompt_git -S -a current_dir -d 'Display the actual git st
 
 		echo -ns $project_pwd ' '
 	else
-		set project_pwd $PWD
+		set project_pwd $PWD2
 		string match "$current_dir*" $project_pwd >/dev/null
 			and set project_pwd (string sub -s (math 1 + (string length $current_dir)) $project_pwd)
 		set project_pwd (string trim --left --chars=/ -- $project_pwd)
 
 		if [ "$project_pwd" ]
 			set -l colors $color_path
-			if not [ -w "$PWD" ]
+			if not [ -w "$PWD2" ]
 				set colors $color_path_nowrite
 			end
 
@@ -897,7 +933,7 @@ function __bobthefish_prompt_git -S -a current_dir -d 'Display the actual git st
 end
 
 function __bobthefish_prompt_dir -S -d 'Display a shortened form of the current directory'
-	__bobthefish_path_segment "$PWD"
+	__bobthefish_path_segment "$PWD2"
 end
 
 function __bobthefish_prompt_conda -S -d 'Display conda environment name'
@@ -916,6 +952,11 @@ function fish_prompt -d 'bobthefish, a fish theme optimized for awesome'
 	# Save the last status for later (do this before the `set` calls below)
 	set -l last_status $status
 	set -g __bobthefish_exit_shown
+
+	# in case $PWD2 is not set
+	if test -z "$PWD2"
+		set -x PWD2 $PWD
+	end
 
 	if [ "$theme_newline_leading" = 'yes' ]
 		echo -ens "\n"
