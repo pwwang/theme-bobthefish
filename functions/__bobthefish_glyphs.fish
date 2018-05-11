@@ -13,6 +13,7 @@ function __bobthefish_glyphs -S -d 'Define glyphs used by bobthefish'
   set -x superuser_glyph         '$ '
   set -x bg_job_glyph            '% '
   set -x hg_glyph                \u263F
+  set -x conda_glyph             'C:'
 
   # Python glyphs
   set -x superscript_glyph       \u00B9 \u00B2 \u00B3

@@ -7,7 +7,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
     case 'terminal' 'terminal-dark*'
       set -l colorfg black
       [ "$color_scheme" = 'terminal-dark-white' ]; and set colorfg white
-      set -x color_initial_segment_exit     white red --bold
+      set -x color_initial_segment_exit1    white red --bold
+      set -x color_initial_segment_exit0    white green --bold
       set -x color_initial_segment_su       white green --bold
       set -x color_initial_segment_jobs     white blue --bold
 
@@ -25,6 +26,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
       set -x color_vi_mode_insert           brgreen $colorfg --bold
       set -x color_vi_mode_visual           bryellow $colorfg --bold
 
+	  set -x color_conda                    white black --bold
+	  set -x color_date                     brgreen $colorfg --bold
       set -x color_vagrant                  brcyan $colorfg
       set -x color_k8s                      magenta white --bold
       set -x color_username                 white black --bold
@@ -37,7 +40,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
     case 'terminal-light*'
       set -l colorfg white
       [ "$color_scheme" = 'terminal-light-black' ]; and set colorfg black
-      set -x color_initial_segment_exit     black red --bold
+      set -x color_initial_segment_exit1    black red --bold
+      set -x color_initial_segment_exit0    black green --bold
       set -x color_initial_segment_su       black green --bold
       set -x color_initial_segment_jobs     black blue --bold
 
@@ -55,6 +59,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
       set -x color_vi_mode_insert           brgreen $colorfg --bold
       set -x color_vi_mode_visual           bryellow $colorfg --bold
 
+	  set -x color_conda                    white black --bold
+	  set -x color_date                     brgreen $colorfg --bold
       set -x color_vagrant                  brcyan $colorfg
       set -x color_k8s                      magenta white --bold
       set -x color_username                 black white --bold
@@ -67,7 +73,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
     case 'terminal2' 'terminal2-dark*'
       set -l colorfg black
       [ "$color_scheme" = 'terminal2-dark-white' ]; and set colorfg white
-      set -x color_initial_segment_exit     grey red --bold
+      set -x color_initial_segment_exit1    grey red --bold
+      set -x color_initial_segment_exit0    grey green --bold
       set -x color_initial_segment_su       grey green --bold
       set -x color_initial_segment_jobs     grey blue --bold
 
@@ -85,6 +92,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
       set -x color_vi_mode_insert           brgreen $colorfg --bold
       set -x color_vi_mode_visual           bryellow $colorfg --bold
 
+	  set -x color_conda                    white black --bold
+	  set -x color_date                     brgreen $colorfg --bold
       set -x color_vagrant                  brcyan $colorfg
       set -x color_k8s                      magenta white --bold
       set -x color_username                 brgrey white --bold
@@ -97,7 +106,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
     case 'terminal2-light*'
       set -l colorfg white
       [ "$color_scheme" = 'terminal2-light-black' ]; and set colorfg black
-      set -x color_initial_segment_exit     brgrey red --bold
+      set -x color_initial_segment_exit1    brgrey red --bold
+      set -x color_initial_segment_exit0    brgrey green --bold
       set -x color_initial_segment_su       brgrey green --bold
       set -x color_initial_segment_jobs     brgrey blue --bold
 
@@ -115,6 +125,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
       set -x color_vi_mode_insert           brgreen $colorfg --bold
       set -x color_vi_mode_visual           bryellow $colorfg --bold
 
+	  set -x color_conda                    white grey --bold
+	  set -x color_date                     brgreen $colorfg --bold
       set -x color_vagrant                  brcyan $colorfg
       set -x color_k8s                      magenta white --bold
       set -x color_username                 grey black --bold
@@ -123,6 +135,49 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
       set -x color_virtualfish              brblue $colorfg --bold
       set -x color_virtualgo                brblue $colorfg --bold
       set -x color_desk                     brblue $colorfg --bold
+
+  	case 'bright'
+        set -l black   000000
+        set -l grey    333333 # a bit darker than normal zenburn grey
+        set -l red     CC9393
+        set -l green   7F9F7F
+        set -l white   DCDCCC
+		set -l yellow  F0C53F
+        set -l orange  CB4B16
+        set -l magenta D33682
+        set -l violet  6C71C4
+        set -l blue    268BD2
+        set -l cyan    109FBA
+
+        set -x color_initial_segment_exit1    $red $grey --bold
+        set -x color_initial_segment_exit0    $green $grey --bold
+        set -x color_initial_segment_su       $white $green --bold
+        set -x color_initial_segment_jobs     $blue $black --bold
+
+        set -x color_path                     $yellow $grey
+        set -x color_path_basename            $yellow $black --bold
+        set -x color_path_nowrite             $grey $red
+        set -x color_path_nowrite_basename    $grey $red --bold
+
+        set -x color_repo                     $green $grey
+        set -x color_repo_work_tree           $grey $grey --bold
+        set -x color_repo_dirty               $red $grey
+        set -x color_repo_staged              $yellow $grey
+
+        set -x color_vi_mode_default          $grey $yellow --bold
+        set -x color_vi_mode_insert           $green $white --bold
+        set -x color_vi_mode_visual           $yellow $grey --bold
+
+        set -x color_conda                    $white $grey --bold
+  	    set -x color_date                     $cyan $grey --bold
+        set -x color_vagrant                  $blue $green --bold
+        set -x color_k8s                      $green $white --bold
+        set -x color_username                 $green $black --bold
+        set -x color_hostname                 $green $grey
+        set -x color_rvm                      $red $grey --bold
+        set -x color_virtualfish              $blue $grey --bold
+        set -x color_virtualgo                $blue $grey --bold
+        set -x color_desk                     $blue $grey --bold
 
     case 'zenburn'
       set -l grey   333333 # a bit darker than normal zenburn grey
@@ -133,7 +188,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
       set -l blue   8CD0D3
       set -l white  DCDCCC
 
-      set -x color_initial_segment_exit     $white $red --bold
+      set -x color_initial_segment_exit1    $white $red --bold
+      set -x color_initial_segment_exit0    $white $green --bold
       set -x color_initial_segment_su       $white $green --bold
       set -x color_initial_segment_jobs     $white $blue --bold
 
@@ -151,6 +207,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
       set -x color_vi_mode_insert           $green $white --bold
       set -x color_vi_mode_visual           $yellow $grey --bold
 
+	  set -x color_conda                    $white $grey --bold
+	  set -x color_date                     $green $white --bold
       set -x color_vagrant                  $blue $green --bold
       set -x color_k8s                      $green $white --bold
       set -x color_username                 $grey $blue --bold
@@ -180,7 +238,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
 
       set -l colorfg $base00
 
-      set -x color_initial_segment_exit     $base02 $base08 --bold
+      set -x color_initial_segment_exit1    $base02 $base08 --bold
+      set -x color_initial_segment_exit0    $base02 $base0B --bold
       set -x color_initial_segment_su       $base02 $base0B --bold
       set -x color_initial_segment_jobs     $base02 $base0D --bold
 
@@ -198,6 +257,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
       set -x color_vi_mode_insert           $base0B $colorfg --bold
       set -x color_vi_mode_visual           $base09 $colorfg --bold
 
+	  set -x color_conda                    $white $grey --bold
+	  set -x color_date                     $base0B $colorfg --bold
       set -x color_vagrant                  $base0C $colorfg --bold
       set -x color_k8s                      $base06 $colorfg --bold
       set -x color_username                 $base02 $base0D --bold
@@ -227,7 +288,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
 
       set -l colorfg $base07
 
-      set -x color_initial_segment_exit     $base05 $base08 --bold
+      set -x color_initial_segment_exit1    $base05 $base08 --bold
+      set -x color_initial_segment_exit0    $base05 $base0B --bold
       set -x color_initial_segment_su       $base05 $base0B --bold
       set -x color_initial_segment_jobs     $base05 $base0D --bold
 
@@ -245,6 +307,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
       set -x color_vi_mode_insert           $base0B $colorfg --bold
       set -x color_vi_mode_visual           $base09 $colorfg --bold
 
+	  set -x color_conda                    $white $grey --bold
+	  set -x color_date                     $base0B $colorfg --bold
       set -x color_vagrant                  $base0C $colorfg --bold
       set -x color_k8s                      $base0B $colorfg --bold
       set -x color_username                 $base02 $base0D --bold
@@ -274,7 +338,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
 
       set colorfg $base03
 
-      set -x color_initial_segment_exit     $base02 $red --bold
+      set -x color_initial_segment_exit1    $base02 $red --bold
+      set -x color_initial_segment_exit0    $base02 $green --bold
       set -x color_initial_segment_su       $base02 $green --bold
       set -x color_initial_segment_jobs     $base02 $blue --bold
 
@@ -292,6 +357,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
       set -x color_vi_mode_insert           $green $colorfg --bold
       set -x color_vi_mode_visual           $yellow $colorfg --bold
 
+	  set -x color_conda                    $white $grey --bold
+	  set -x color_date                     $green $colorfg --bold
       set -x color_vagrant                  $violet $colorfg --bold
       set -x color_k8s                      $green $colorfg --bold
       set -x color_username                 $base2 $blue --bold
@@ -321,7 +388,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
 
       set colorfg $base3
 
-      set -x color_initial_segment_exit     $base2 $red --bold
+      set -x color_initial_segment_exit1    $base2 $red --bold
+      set -x color_initial_segment_exit0    $base2 $green --bold
       set -x color_initial_segment_su       $base2 $green --bold
       set -x color_initial_segment_jobs     $base2 $blue --bold
 
@@ -339,6 +407,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
       set -x color_vi_mode_insert           $green $colorfg --bold
       set -x color_vi_mode_visual           $yellow $colorfg --bold
 
+	  set -x color_conda                    $white $grey --bold
+	  set -x color_date                     $green $colorfg --bold
       set -x color_vagrant                  $violet $colorfg --bold
       set -x color_k8s                      $green $colorfg --bold
       set -x color_username                 $base02 $blue --bold
@@ -361,7 +431,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
       set -l black    000000
       set -l ruby_red af0000
 
-      set -x color_initial_segment_exit     $grey[3] $red[2] --bold
+      set -x color_initial_segment_exit1    $grey[3] $red[2] --bold
+      set -x color_initial_segment_exit0    $grey[3] $green[2] --bold
       set -x color_initial_segment_su       $grey[3] $green[2] --bold
       set -x color_initial_segment_jobs     $grey[3] $blue[3] --bold
 
@@ -379,6 +450,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
       set -x color_vi_mode_insert           $green[2] $grey[3] --bold
       set -x color_vi_mode_visual           $orange[1] $orange[3] --bold
 
+	  set -x color_conda                    $white $grey[1] --bold
+	  set -x color_date                     $green[2] $grey[3] --bold
       set -x color_vagrant                  $blue[1] $white --bold
       set -x color_k8s                      $green[1] $colorfg --bold
       set -x color_username                 $grey[1] $blue[3] --bold
@@ -400,7 +473,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
       set -l fg       fbf1c7 ebdbb2 d5c4a1 a89984
       set -l bg       504945 282828
 
-      set -x color_initial_segment_exit  $fg[1] $red[2] --bold
+      set -x color_initial_segment_exit1 $fg[1] $red[2] --bold
+      set -x color_initial_segment_exit0 $fg[1] $green[2] --bold
       set -x color_initial_segment_su    $fg[1] $green[2] --bold
       set -x color_initial_segment_jobs  $fg[1] $aqua[2] --bold
 
@@ -418,6 +492,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
       set -x color_vi_mode_insert        $blue[1] $bg[2] --bold
       set -x color_vi_mode_visual        $yellow[1] $bg[2] --bold
 
+	  set -x color_conda                 $aqua[1] $grey[3] --bold
+	  set -x color_date                  $blue[1] $bg[2] --bold
       set -x color_vagrant               $blue[2] $fg[2] --bold
       set -x color_k8s                   $green[2] $fg[2] --bold
       set -x color_username              $fg[3] $blue[2] --bold
@@ -441,7 +517,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
       set -l ruby_red af0000
       set -l go_blue  00d7d7
 
-      set -x color_initial_segment_exit     $white $red[2] --bold
+      set -x color_initial_segment_exit1    $white $red[2] --bold
+      set -x color_initial_segment_exit0    $white $green[2] --bold
       set -x color_initial_segment_su       $white $green[2] --bold
       set -x color_initial_segment_jobs     $white $blue[3] --bold
 
@@ -459,6 +536,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
       set -x color_vi_mode_insert           $green[2] $grey[3] --bold
       set -x color_vi_mode_visual           $orange[1] $orange[3] --bold
 
+	  set -x color_conda                    $white $grey[2] --bold
+	  set -x color_date                     $green[2] $grey[3] --bold
       set -x color_vagrant                  $blue[1] $white --bold
       set -x color_k8s                      $green[2] $white --bold
       set -x color_username                 $grey[1] $blue[3] --bold
@@ -471,7 +550,8 @@ function __bobthefish_colors -S -a color_scheme -d 'Define colors used by bobthe
 end
 
 function __bobthefish_user_color_scheme_deprecated
-  set -q __color_initial_segment_exit;  or set -l __color_initial_segment_exit  ffffff ce000f --bold
+  set -q __color_initial_segment_exit1; or set -l __color_initial_segment_exit1 ffffff ce000f --bold
+  set -q __color_initial_segment_exit0; or set -l __color_initial_segment_exit0 ffffff 189303 --bold
   set -q __color_initial_segment_su;    or set -l __color_initial_segment_su    ffffff 189303 --bold
   set -q __color_initial_segment_jobs;  or set -l __color_initial_segment_jobs  ffffff 255e87 --bold
   set -q __color_path;                  or set -l __color_path                  333333 999999
@@ -485,6 +565,8 @@ function __bobthefish_user_color_scheme_deprecated
   set -q __color_vi_mode_default;       or set -l __color_vi_mode_default       999999 333333 --bold
   set -q __color_vi_mode_insert;        or set -l __color_vi_mode_insert        189303 333333 --bold
   set -q __color_vi_mode_visual;        or set -l __color_vi_mode_visual        f6b117 3a2a03 --bold
+  set -q __color_conda;                 or set -l __color_conda                 189303 333333 --bold
+  set -q __color_date;                  or set -l __color_date                  189303 333333 --bold
   set -q __color_vagrant;               or set -l __color_vagrant               48b4fb ffffff --bold
   set -q __color_username;              or set -l __color_username              cccccc 255e87 --bold
   set -q __color_hostname;              or set -l __color_hostname              cccccc 255e87
@@ -507,7 +589,8 @@ function __bobthefish_user_color_scheme_deprecated
   ___bobthefish_colors default
 
   # then override everything you want! note that these must be defined with `set -x`
-  set -x color_initial_segment_exit  $__color_initial_segment_exit
+  set -x color_initial_segment_exit1 $__color_initial_segment_exit1
+  set -x color_initial_segment_exit0 $__color_initial_segment_exit0
   set -x color_initial_segment_su    $__color_initial_segment_su
   set -x color_initial_segment_jobs  $__color_initial_segment_jobs
   set -x color_path                  $__color_path
@@ -521,6 +604,8 @@ function __bobthefish_user_color_scheme_deprecated
   set -x color_vi_mode_default       $__color_vi_mode_default
   set -x color_vi_mode_insert        $__color_vi_mode_insert
   set -x color_vi_mode_visual        $__color_vi_mode_visual
+  set -x color_conda                 $__color_conda
+  set -x color_date                  $__color_date
   set -x color_vagrant               $__color_vagrant
   set -x color_username              $__color_username
   set -x color_hostname              $__color_hostname
