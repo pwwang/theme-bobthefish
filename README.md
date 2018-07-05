@@ -14,5 +14,5 @@
 
 ## New options
 
-- `theme_newline_leading`: Different from `theme_newline_cursor`, you will have `> ` (or similar power font) as leading character.
+- `theme_newline_leading`: Output a newline (`"\n"`) before power line starts.
 
