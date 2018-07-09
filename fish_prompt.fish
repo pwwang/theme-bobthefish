@@ -937,7 +937,7 @@ function __bobthefish_prompt_dir -S -d 'Display a shortened form of the current 
 end
 
 function __bobthefish_prompt_conda -S -d 'Display conda environment name'
-	[ ! "$CONDA_DEFAULT_ENV" ]; and return
+	test -z "$CONDA_DEFAULT_ENV" -o "$CONDA_DEFAULT_ENV" = "base"; and return
 	set_color normal
 	__bobthefish_start_segment $color_conda
 	echo -n "$conda_glyph$CONDA_DEFAULT_ENV "
